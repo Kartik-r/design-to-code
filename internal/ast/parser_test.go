@@ -86,3 +86,15 @@ func TestParseFile_MethodHasReceiver(t *testing.T) {
 	}
 	t.Error("method GetUser not found in parsed nodes")
 }
+
+func TestParseFile_ExtractsCallEdges(t *testing.T) {
+    path := testdataPath(t, "sample.go")
+    _, edges, err := ParseFile(path)
+    if err != nil { t.Fatalf("%v", err) }
+    callCount := 0
+    for _, e := range edges {
+        if e.Type == types.EdgeCalls { callCount++ }
+    }
+    if callCount == 0 { t.Error("expected CALLS edges, got none") }
+    t.Logf("Found %d CALLS edges", callCount)
+}
