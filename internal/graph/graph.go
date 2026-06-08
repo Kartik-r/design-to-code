@@ -113,3 +113,27 @@ func (g *Graph) GetImpacted(nodeID string) []*types.Node {
 	}
 	return result
 }
+
+// GetTransitiveDependencies returns all nodes nodeID transitively depends on.
+// Uses BFS following outgoing edges.
+func (g *Graph) GetTransitiveDependencies(nodeID string) []*types.Node {
+	visited := make(map[string]bool)
+	queue := []string{nodeID}
+	result := make([]*types.Node, 0)
+	visited[nodeID] = true
+
+	for len(queue) > 0 {
+		current := queue[0]
+		queue = queue[1:]
+		for _, edge := range g.adjacencyOut[current] {
+			if !visited[edge.To] {
+				visited[edge.To] = true
+				if n := g.nodesByID[edge.To]; n != nil {
+					result = append(result, n)
+				}
+				queue = append(queue, edge.To)
+			}
+		}
+	}
+	return result
+}
