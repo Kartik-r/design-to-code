@@ -113,7 +113,7 @@ func runQuery(g *graph.Graph, query string) {
 		results = g.GetImpacted(nodeID)
 		fmt.Printf("Transitively impacted if this changes (%d):\n", len(results))
 		for _, n := range results {
-			fmt.Printf("  ⚡ [%-12s] %s\n", n.Type, n.ID)
+			fmt.Printf("[%-12s] %s\n", n.Type, n.ID)
 		}
 	default:
 		fmt.Printf("Unknown query type '%s'. Valid: deps, callers, impacted\n", queryType)
