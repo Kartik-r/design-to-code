@@ -45,5 +45,5 @@ go run ./cmd/graphparser --path ./corpus/gin --output graph.json
 - [x] Go AST parser — packages, files, functions
 - [x] Call graph extraction
 - [x] Interface → implementation edges
-- [ ] JSON / GraphML export
+- [x] JSON / GraphML export
 - [ ] Diagram-to-IaC generator (Component 2)
