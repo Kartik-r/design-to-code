@@ -1,0 +1,80 @@
+{
+  "pattern": "microservices",
+  "services": [
+    {
+      "name": "gateway",
+      "language": "go",
+      "framework": "gin",
+      "port": "8080",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/aggregate",
+          "handler": "aggregateHandler"
+        },
+        {
+          "method": "GET",
+          "path": "/health",
+          "handler": "healthCheck"
+        }
+      ],
+      "external_calls": [
+        {
+          "target": "service-a",
+          "protocol": "http"
+        },
+        {
+          "target": "service-b",
+          "protocol": "http"
+        }
+      ],
+      "env_vars": [
+        "GATEWAY_ENV"
+      ]
+    },
+    {
+      "name": "service-a",
+      "language": "go",
+      "framework": "gin",
+      "port": "9001",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/users",
+          "handler": "listUsers"
+        }
+      ],
+      "db_dependencies": [
+        {
+          "driver": "postgres",
+          "usage": "read-write"
+        }
+      ],
+      "env_vars": [
+        "SERVICE_A_DB_DSN"
+      ]
+    },
+    {
+      "name": "service-b",
+      "language": "go",
+      "framework": "gin",
+      "port": "9002",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/orders",
+          "handler": "listOrders"
+        }
+      ],
+      "db_dependencies": [
+        {
+          "driver": "mysql",
+          "usage": "read-write"
+        }
+      ],
+      "env_vars": [
+        "SERVICE_B_DB_DSN"
+      ]
+    }
+  ]
+}
