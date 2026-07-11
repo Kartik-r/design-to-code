@@ -33,9 +33,14 @@ type Node struct {
     Metadata map[string]string `json:"metadata,omitempty"`
 }
 
-// Edge represents a directed relationship between two nodes
+// Edge represents a directed relationship between two nodes.
+// Args captures literal (string/int/bool) arguments passed on a CALLS edge,
+// e.g. the route path in c.GET("/users/:id", h) or the port in r.Run(":8080").
+// Non-literal arguments (variables, expressions) are omitted — this stays a
+// generic capability of the parser, not gin-specific logic.
 type Edge struct {
     From string   `json:"from"`
     To   string   `json:"to"`
     Type EdgeType `json:"type"`
+    Args []string `json:"args,omitempty"`
 }

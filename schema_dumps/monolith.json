@@ -1,0 +1,49 @@
+{
+  "pattern": "monolith",
+  "services": [
+    {
+      "name": "app",
+      "language": "go",
+      "framework": "gin",
+      "port": "8080",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/users/:id",
+          "handler": "getUser"
+        },
+        {
+          "method": "POST",
+          "path": "/users",
+          "handler": "createUser"
+        },
+        {
+          "method": "PUT",
+          "path": "/users/:id",
+          "handler": "updateUser"
+        },
+        {
+          "method": "DELETE",
+          "path": "/users/:id",
+          "handler": "deleteUser"
+        },
+        {
+          "method": "GET",
+          "path": "/health",
+          "handler": "healthCheck"
+        }
+      ],
+      "db_dependencies": [
+        {
+          "driver": "postgres",
+          "usage": "read-write"
+        }
+      ],
+      "env_vars": [
+        "DB_HOST",
+        "DB_PORT",
+        "DB_USER"
+      ]
+    }
+  ]
+}
