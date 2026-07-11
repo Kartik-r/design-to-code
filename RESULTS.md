@@ -88,9 +88,9 @@ Generation is deterministic (Go `text/template`, no LLM, no network call at gene
 
 | Pattern | terraform validate | kubeconform | Notes |
 |---|---|---|---|
-| monolith | ✅ PASS | ✅ PASS | 1 service, 5 routes, 1 RDS instance (postgres) |
-| microservices | ✅ PASS | ✅ PASS | 3 services, 2 RDS instances (postgres + mysql), resolved cross-service HTTP calls |
-| event-driven | ✅ PASS | ✅ PASS | 2 services, 1 shared SQS queue (deduplicated across publish/consume), worker service correctly has no exposed port |
+| monolith | PASS | PASS | 1 service, 5 routes, 1 RDS instance (postgres) |
+| microservices | PASS | PASS | 3 services, 2 RDS instances (postgres + mysql), resolved cross-service HTTP calls |
+| event-driven | PASS | PASS | 2 services, 1 shared SQS queue (deduplicated across publish/consume), worker service correctly has no exposed port |
 
 **6/6 real validator checks pass** across all 3 canonical patterns — every piece of generated Terraform and Kubernetes output is syntactically and structurally valid according to the actual `terraform` and `kubeconform` CLIs, not a self-reported check.
 
