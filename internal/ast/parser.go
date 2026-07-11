@@ -6,6 +6,7 @@ import (
 	"go/parser"
 	"go/token"
 	"path/filepath"
+	"strconv"
 
 	"github.com/Kartik-r/design-to-code/pkg/types"
 )
@@ -65,6 +66,7 @@ func ParseFile(filePath string) ([]*types.Node, []*types.Edge, error) {
 					From: currentFuncID,
 					To:   calleeID,
 					Type: types.EdgeCalls,
+					Args: extractLiteralArgs(x.Args),
 				})
 			}
 
@@ -130,6 +132,36 @@ func resolveCalleeID(fun ast.Expr, currentPackage string) string {
 	}
 
 	return ""
+}
+
+// extractLiteralArgs returns one entry per call argument, in position order.
+// Literal strings/numbers/bools are captured as their real value. Bare
+// identifiers (e.g. a handler function passed by name) are captured as
+// their source name. Anything more complex (a method value, an inline
+// expression) becomes "" so that positional lookups like Args[0] stay
+// reliable even when that particular argument isn't literal.
+func extractLiteralArgs(args []ast.Expr) []string {
+	if len(args) == 0 {
+		return nil
+	}
+	result := make([]string, len(args))
+	for i, a := range args {
+		switch v := a.(type) {
+		case *ast.BasicLit:
+			if v.Kind == token.STRING {
+				if unquoted, err := strconv.Unquote(v.Value); err == nil {
+					result[i] = unquoted
+					continue
+				}
+			}
+			result[i] = v.Value
+		case *ast.Ident:
+			result[i] = v.Name
+		default:
+			result[i] = ""
+		}
+	}
+	return result
 }
 
 func extractTypeName(expr ast.Expr) string {
