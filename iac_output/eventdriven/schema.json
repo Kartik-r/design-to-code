@@ -1,0 +1,43 @@
+{
+  "pattern": "event-driven",
+  "services": [
+    {
+      "name": "consumer",
+      "language": "go",
+      "framework": "",
+      "external_calls": [
+        {
+          "target": "orders.created",
+          "protocol": "queue",
+          "detail": "consume"
+        }
+      ],
+      "env_vars": [
+        "BROKER_URL"
+      ]
+    },
+    {
+      "name": "producer",
+      "language": "go",
+      "framework": "gin",
+      "port": "8080",
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/orders",
+          "handler": "createOrder"
+        }
+      ],
+      "external_calls": [
+        {
+          "target": "orders.created",
+          "protocol": "queue",
+          "detail": "publish"
+        }
+      ],
+      "env_vars": [
+        "BROKER_URL"
+      ]
+    }
+  ]
+}

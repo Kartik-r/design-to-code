@@ -44,4 +44,8 @@ gin/
 # Python
 venv/
 __pycache__/
-*.pyc
+*.pyc# Terraform runtime files -- never commit these
+.terraform/
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
